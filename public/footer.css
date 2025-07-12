@@ -1,0 +1,26 @@
+
+.footer{
+  height:8rem;
+  background-color: #ebebeb;
+  display: flex;
+ flex-wrap: wrap;
+ justify-content: center;
+ /* align-items: space-evenly; */
+
+}
+
+.f-info-socials{
+  text-decoration: none;
+  color: #222222;
+}
+
+
+
+.f-info{
+  display: flex;
+  background-color: #ebebeb;
+  height:8rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  /* align-items: space-evenly; */
+}

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Edit Listing</title>
+
+  <!-- Bootstrap CSS CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <!-- Font Awesome CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <style>
+    .navbar {
+      height: 5rem;
+      background-color:white;
+    }
+
+    .fa-compass {
+      color: #fe424d;
+      font-size: 2rem;
+    }
+
+    .nav-link {
+      color: #222222 !important;
+    }
+
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+   <%- include('layouts/boilerplate') %>
+  
+
+  <!--  Edit Form -->
+   <div class="row">
+  <div class="col-8 offset-2">
+  <div class="container mt-4">
+    <h1>Edit Your Listing</h1>
+    <form method="POST" action="/listings/<%= listing._id %>?_method=PUT" class="needs-validation">
+      <div class="mb-3">
+        <label class="form-label" >Title</label>
+        <input name="title" class="form-control" required  type="text" value="<%= listing.title %>">
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Description</label>
+        <textarea name="description" class="form-control" required  rows="4" ><%= listing.description %></textarea>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Image URL</label>
+        <input name="image" class="form-control" required  type="text" value="<%= listing.image.url %>">
+
+          
+      </div>
+
+    <div class="row">
+    <div class="mb-3 col-md-4" >
+      <div class="mb-3">
+        <label class="form-label">Price</label>
+        <input name="price" class="form-control" required  type="number" value="<%= listing.price %>">
+      </div>
+     </div>
+      <div class="mb-3 col-md-4">
+        <label class="form-label">Country</label>
+        <input name="country" class="form-control" required  type="text" value="<%= listing.country %>">
+      </div>
+    
+    </div>
+    
+      <div class="mb-3">
+        <label for="location" class="form-label">Location</label>
+        <input name="location" class="form-control" required type="text" value="<%= listing.location %>">
+      </div>
+
+      <button class="btn btn-dark edit-btn">edit</button>
+    </form>
+    <br>
+    <br>
+  </div>
+ </div>
+  </div>
+   <%- include("includes/footer") %>
+  <!-- ✅ Bootstrap JS (for navbar toggle) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js">(() => {
+  'use strict'
+
+  // Fetch all the forms we want to apply custom Bootstrap validation styles to
+  const forms = document.querySelectorAll('.needs-validation')
+
+  // Loop over them and prevent submission
+  Array.from(forms).forEach(form => {
+    form.addEventListener('submit', event => {
+      if (!form.checkValidity()) {
+        event.preventDefault()
+        event.stopPropagation()
+      }
+
+      form.classList.add('was-validated')
+    }, false)
+  })
+})()</script>
+</body>
+</html>
