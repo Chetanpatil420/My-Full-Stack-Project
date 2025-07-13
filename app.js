@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require("express");
 const app = express()
 const mongoose = require("mongoose")
@@ -8,6 +9,7 @@ const ejsMate = require("ejs-mate");
 const ExpressError = ("./util/ExpressErrror.js");
 const Review = require('./Models/review.js')
 const session= require("express-session");
+const MongoStore = require('connect-mongo');
 const flash = require("connect-flash");
 const passport = require("passport");
 const localStrategy = require("passport-local");
@@ -15,6 +17,8 @@ const User = require("./Models/user.js");
 const userroute = require("./routes/user.js");
 const {isLoggedIn,isOwner,isReviewAuthor} = require("./middleware.js");
 const {saveRedirectUrl} = require("./middleware.js");
+
+
 
 app.use(express.static("public")); 
 app.use(express.urlencoded({ extended: true }));
@@ -28,16 +32,54 @@ app.set("views",path.join(__dirname,"views"));
 app.use(session({ secret: 'keyboard cat', resave: false, saveUninitialized: false }));
 
 
+//database connection
+// const mongoUrl = "mongodb://127.0.0.1:27017/wanderlust";
+// const dbUrl =process.env.ATLASDBURL; 
+const dbUrl = 'mongodb+srv://cp7385403833:WWy4OpMEugiQgpwG@cluster0.7ejppx6.mongodb.net/wanderlust?retryWrites=true&w=majority&tls=true';
+
+
+console.log(dbUrl);
+
+main().then((dbUrl)=>{
+    console.log("connection succssesful");
+  
+
+})
+main().catch(err => console.log(err));
+
+
+async function main() {
+  await mongoose.connect(dbUrl);
+        
+}
+
+
+
+const store =  MongoStore.create({
+    mongoUrl:dbUrl,
+    crypto: {
+        secret: "mysupersecretcode",
+    },
+     touchAfter : 24 * 3600,
+});
+
+store.on("error", () => {
+    console.log("Error",error);
+});
+
 const sessionOption = {
+    store,
     secret : "mysupersecretcode",
     resave: false,
     saveUnintialized: true,
+   
     cookie:{
-            expires : Date.now() + 7 * 24 * 60 * 1000,
-            maxAge:  7 * 24 * 60 * 1000,
+            expires : Date.now() + 7 * 24 * 60 * 60 * 1000,
+            maxAge:  7 * 24 * 60  * 60 *  1000,
             httpOnly: true,
      }
 };
+
 
 
 app.use(session(sessionOption));
@@ -123,17 +165,27 @@ app.get("/logout", (req,res,next) =>{
     })
 })
 
-const mongoUrl = "mongodb://127.0.0.1:27017/wanderlust";
 
-main().then(()=>{
-    console.log("connection succssesful");
 
-})
-main().catch(err => console.log(err));
 
-async function main() {
-    await mongoose.connect(mongoUrl)
-}
+// //database connection
+// // const mongoUrl = "mongodb://127.0.0.1:27017/wanderlust";
+// const dbUrl =process.env.ATLASDBURL; 
+// console.log(dbUrl);
+
+// main().then((dbUrl)=>{
+//     console.log("connection succssesful");
+
+// })
+// main().catch(err => console.log(err));
+
+// // async function main() {
+// //     await mongoose.connect(dbUrl)
+// // }
+
+// async function main() {
+//   await mongoose.connect(dbUrl);
+// }
 
 
 app.get("/", (req,res) => {
@@ -314,6 +366,22 @@ app.delete("/listings/:id/reviews/:reviewId",isLoggedIn, isReviewAuthor,async(re
 //     res.status(statusCode).send(message);
 // });
 
+
+// async function run() {
+//   try {
+//     await mongoose.connect(process.env.ATLASDBURL);
+//     console.log("✅ Connected to MongoDB");
+
+//     const collections = await mongoose.connection.db.allListingsListing().toArray();
+//     console.log("Collections:", collections.map(c => c.name));
+//     process.exit(0);
+//   } catch (err) {
+//     console.error("❌ Error connecting:", err);
+//     process.exit(1);
+//   }
+// }
+
+// run();
 
 app.listen(8080, ()=>{
     console.log("Server is Listening to port 8080");
