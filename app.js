@@ -35,9 +35,7 @@ app.use(session({ secret: 'keyboard cat', resave: false, saveUninitialized: fals
 //database connection
 // const mongoUrl = "mongodb://127.0.0.1:27017/wanderlust";
 // const dbUrl =process.env.ATLASDBURL; 
-const dbUrl = 'mongodb+srv://cp7385403833:WWy4OpMEugiQgpwG@cluster0.7ejppx6.mongodb.net/wanderlust?retryWrites=true&w=majority&tls=true';
-
-
+const dbUrl = 'mongodb+srv://cp7385403833:WWy4OpMEugiQgpwG@cluster0.7ejppx6.mongodb.net/wanderlust?retryWrites=true&w=majority&ssl=true';
 console.log(dbUrl);
 
 main().then((dbUrl)=>{
